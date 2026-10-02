@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Wand Spellcasting Display</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-deep: #0d0b1a;
+    --bg-vignette: #1a1330;
+    --gold: #d9b25b;
+    --violet: #8a5cf6;
+    --cyan: #5ce1e6;
+    --ink: #ece7f7;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 24px;
+    background:
+      radial-gradient(ellipse at 50% 30%, var(--bg-vignette) 0%, var(--bg-deep) 65%);
+    font-family: 'Inter', sans-serif;
+    color: var(--ink);
+    padding: 20px 16px 26px;
+  }
+
+  .stage {
+    position: relative;
+    width: min(520px, 90vw);
+    height: min(520px, 90vw);
+    border-radius: 50%;
+    background: radial-gradient(circle at 50% 45%, #14102a 0%, #0a0815 75%);
+    box-shadow:
+      0 0 0 1px rgba(217, 178, 91, 0.15),
+      0 0 60px rgba(138, 92, 246, 0.15),
+      inset 0 0 80px rgba(0,0,0,0.6);
+  }
+
+  canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+  }
+
+  .spell-name {
+    position: absolute;
+    left: 50%;
+    bottom: 14%;
+    transform: translateX(-50%) translateY(10px);
+    font-family: 'Cinzel', serif;
+    font-size: clamp(20px, 3.5vw, 30px);
+    letter-spacing: 0.04em;
+    opacity: 0;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    text-shadow: 0 0 18px currentColor;
+    white-space: nowrap;
+  }
+
+  .spell-name.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  .hint {
+    font-size: 14px;
+    color: rgba(236, 231, 247, 0.45);
+    letter-spacing: 0.02em;
+  }
+
+  .controls {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .controls button {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--ink);
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(217, 178, 91, 0.3);
+    border-radius: 999px;
+    padding: 10px 22px;
+    cursor: pointer;
+    transition: border-color 0.25s ease, background 0.25s ease, transform 0.15s ease;
+  }
+
+  .controls button:hover {
+    border-color: rgba(217, 178, 91, 0.8);
+    background: rgba(217, 178, 91, 0.08);
+  }
+
+  .controls button:active {
+    transform: scale(0.96);
+  }
+</style>
+</head>
+<body>
+
+  <div class="stage">
+    <canvas id="canvas"></canvas>
+    <div class="spell-name" id="spellName"></div>
+  </div>
+
+  <div class="controls" id="controls">
+    <button data-gesture="Circle">Circle</button>
+    <button data-gesture="Z">Z</button>
+    <button data-gesture="Angle">Angle</button>
+  </div>
+
+  <!-- This is a single-line comment 
+<div class="hint">In the full setup, live_predict.py would trigger these automatically as it recognizes each gesture.</div>
+-->
+<script>
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+const spellNameEl = document.getElementById('spellName');
+
+function resize() {
+  const rect = canvas.getBoundingClientRect();
+  canvas.width = rect.width * devicePixelRatio;
+  canvas.height = rect.height * devicePixelRatio;
+  ctx.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
+}
+window.addEventListener('resize', resize);
+resize();
+
+// each gesture maps to: a traced path (normalized 0-1 coords), a color theme, and an invented spell name
+const GESTURES = {
+  'Circle': {
+    spell: 'Alohomora',
+    color: '#8a5cf6',
+    path: (t) => {
+      const angle = t * Math.PI * 2 - Math.PI / 2;
+      return { x: 0.5 + 0.3 * Math.cos(angle), y: 0.5 + 0.3 * Math.sin(angle) };
+    }
+  },
+  'Z': {
+    spell: 'Diffindo',
+    color: '#5ce1e6',
+    path: (t) => {
+      // three segments: top line, diagonal, bottom line
+      if (t < 0.35) {
+        const s = t / 0.35;
+        return { x: 0.3 + s * 0.4, y: 0.28 };
+      } else if (t < 0.7) {
+        const s = (t - 0.35) / 0.35;
+        return { x: 0.7 - s * 0.4, y: 0.28 + s * 0.44 };
+      } else {
+        const s = (t - 0.7) / 0.3;
+        return { x: 0.3 + s * 0.4, y: 0.72 };
+      }
+    }
+  },
+  'Angle': {
+    spell: 'Ascendio',
+    color: '#d9b25b',
+    path: (t) => {
+      // a straight line to the right, then a straight line up
+      if (t < 0.5) {
+        const s = t / 0.5;
+        return { x: 0.3 + s * 0.4, y: 0.68 };
+      } else {
+        const s = (t - 0.5) / 0.5;
+        return { x: 0.7, y: 0.68 - s * 0.4 };
+      }
+    }
+  }
+};
+
+let particles = [];
+let animId = null;
+let castStart = null;
+const CAST_DURATION = 1100; // ms to trace the full shape
+
+function spawnParticle(x, y, color) {
+  particles.push({
+    x, y,
+    color,
+    life: 1,
+    size: 2 + Math.random() * 2.5,
+    driftX: (Math.random() - 0.5) * 0.0006,
+    driftY: (Math.random() - 0.5) * 0.0006 - 0.0003,
+  });
+}
+
+function draw(now) {
+  const rect = canvas.getBoundingClientRect();
+  const W = rect.width, H = rect.height;
+
+  ctx.clearRect(0, 0, W, H);
+
+  // faint ambient stars
+  ctx.save();
+  ctx.globalAlpha = 0.25;
+  for (let i = 0; i < 40; i++) {
+    const sx = (i * 137.5) % W;
+    const sy = (i * 219.3) % H;
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(sx, sy, 1, 1);
+  }
+  ctx.restore();
+
+  const gestureName = draw.currentGesture;
+  const gesture = gestureName ? GESTURES[gestureName] : null;
+
+  if (gesture && castStart !== null) {
+    const elapsed = now - castStart;
+    const t = Math.min(elapsed / CAST_DURATION, 1);
+    const p = gesture.path(t);
+    spawnParticle(p.x * W, p.y * H, gesture.color);
+
+    if (t >= 1 && !draw.nameShown) {
+      draw.nameShown = true;
+      spellNameEl.textContent = gesture.spell;
+      spellNameEl.style.color = gesture.color;
+      spellNameEl.classList.add('show');
+    }
+  }
+
+  // draw + update particles with an additive glow
+  ctx.globalCompositeOperation = 'lighter';
+  particles.forEach(p => {
+    ctx.beginPath();
+    const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size * 4);
+    grad.addColorStop(0, hexToRgba(p.color, 0.9 * p.life));
+    grad.addColorStop(1, hexToRgba(p.color, 0));
+    ctx.fillStyle = grad;
+    ctx.arc(p.x, p.y, p.size * 4, 0, Math.PI * 2);
+    ctx.fill();
+
+    p.x += p.driftX * W;
+    p.y += p.driftY * H;
+    p.life -= 0.012;
+  });
+  ctx.globalCompositeOperation = 'source-over';
+
+  particles = particles.filter(p => p.life > 0);
+
+  animId = requestAnimationFrame(draw);
+}
+
+function hexToRgba(hex, alpha) {
+  const r = parseInt(hex.slice(1, 3), 16);
+  const g = parseInt(hex.slice(3, 5), 16);
+  const b = parseInt(hex.slice(5, 7), 16);
+  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+}
+
+function castGesture(name) {
+  draw.currentGesture = name;
+  draw.nameShown = false;
+  castStart = performance.now();
+  spellNameEl.classList.remove('show');
+}
+
+document.getElementById('controls').addEventListener('click', (e) => {
+  const btn = e.target.closest('button');
+  if (!btn) return;
+  castGesture(btn.dataset.gesture);
+});
+
+animId = requestAnimationFrame(draw);
+
+// tell the portfolio page how tall this content is, so its frame fits exactly (no inner scrollbar)
+function sendHeight() {
+  if (window.parent === window) return;
+  const h = Math.ceil(document.body.getBoundingClientRect().height);
+  window.parent.postMessage({ type: 'spell-height', height: h }, '*');
+}
+if (window.ResizeObserver) new ResizeObserver(sendHeight).observe(document.body);
+window.addEventListener('load', sendHeight);
+window.addEventListener('resize', sendHeight);
+sendHeight();
+</script>
+
+</body>
+</html>

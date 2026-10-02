@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Yehya Medhat — Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FFFFFF; --paper-dim:#F6F6F4; --bar:#1C2B3A; --ink:#1C2B3A; --ink-soft:#5B6672;
+    --ink-strong:#0B0C0E; --amber:#E8A93D; --amber-dim:#C98E28; --line:#E4E4E0;
+    --font-head:'Space Grotesk',sans-serif; --font-body:'IBM Plex Sans',sans-serif; --font-mono:'IBM Plex Mono',monospace;
+    box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--paper);color:var(--ink);font-family:var(--font-body);line-height:1.65;overflow-x:hidden;background-image:radial-gradient(circle,rgba(0,0,0,0.025) 1px,transparent 1px);background-size:5px 5px}
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){--bar:#0A0F14;--ink-strong:#F7F7F3;--paper:#14181C;--paper-dim:#1B2025;--ink:#EDEEE9;--ink-soft:#A9B2BA;--line:#2A2F34}
+  }
+  :root[data-theme="dark"]{--bar:#0A0F14;--ink-strong:#F7F7F3;--paper:#14181C;--paper-dim:#1B2025;--ink:#EDEEE9;--ink-soft:#A9B2BA;--line:#2A2F34}
+  .wrap{max-width:1100px;margin:0 auto;padding:0 28px}
+
+  .site-header{position:sticky;top:0;z-index:800;background:var(--bar);border-bottom:3px solid var(--amber);transition:box-shadow .25s}
+  .site-header.compact{box-shadow:0 6px 18px rgba(10,15,20,.25)}
+  .site-header nav{transition:padding .25s}
+  .site-header.compact nav{padding:10px 0}
+  nav{display:flex;justify-content:space-between;align-items:center;padding:18px 0}
+  .nav-mark{font-family:var(--font-head);font-weight:700;font-size:16px;letter-spacing:.12em;color:#fff;background:none;border:2px solid var(--amber);border-radius:8px;padding:5px 11px 5px 14px;cursor:pointer;line-height:1.2;transition:background .15s,color .15s}
+  .nav-mark:hover{background:var(--amber);color:var(--bar)}
+  .nav-links{display:flex;gap:30px}
+  .nav-links button{font-family:var(--font-body);font-size:14px;background:none;border:none;cursor:pointer;color:#B9C5CF;padding:4px 0;border-bottom:2px solid transparent;transition:.15s}
+  .nav-links button.active,.nav-links button:hover{color:#fff;border-color:var(--amber)}
+
+  .page{display:none;padding:60px 0 80px}
+  .page.active{display:block;animation:pageIn .35s ease}
+  @keyframes pageIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+  @media (prefers-reduced-motion: reduce){.page.active{animation:none}}
+
+  /* HOME */
+  .hero-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center}
+  @media(max-width:800px){.hero-grid{grid-template-columns:1fr}}
+  .hero-eyebrow{font-family:var(--font-mono);font-size:13px;color:var(--ink-soft);margin-bottom:16px}
+  h1.scope-phrase{font-family:'Caveat',cursive;font-weight:700;font-size:clamp(2.4rem,5.5vw,3.6rem);line-height:1.15;letter-spacing:.01em;color:#1B6E5B}
+  @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) h1.scope-phrase{color:#7CFFC0;text-shadow:0 0 10px rgba(124,255,192,.35)}}
+  :root[data-theme="dark"] h1.scope-phrase{color:#7CFFC0;text-shadow:0 0 10px rgba(124,255,192,.35)}
+  .home-about{max-width:60ch;font-size:19.5px;line-height:1.7;color:var(--ink-strong)}
+  .home-intro{margin-top:80px;padding-top:48px;border-top:2px solid var(--ink-soft);border-top:2px solid color-mix(in srgb,var(--ink) 40%,transparent)}
+  .scope-wrap{width:100%}
+  .scope-wrap svg{width:100%;height:auto}
+  .section-label{font-family:var(--font-mono);font-size:12.5px;color:var(--amber-dim);margin:56px 0 16px}
+  h2{font-family:var(--font-head);font-weight:600;font-size:1.5rem}
+  .section-head{margin-top:64px}
+
+  .grid3{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:20px;margin-top:20px}
+
+  .pcard{position:relative;border:1px solid var(--line);border-radius:5px;overflow:hidden;background:var(--paper-dim);cursor:pointer}
+  .pcard .media{aspect-ratio:4/3;background:repeating-linear-gradient(45deg,var(--line) 0,var(--line) 1px,transparent 1px,transparent 13px),var(--paper-dim);display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:11px;color:var(--ink-soft);text-align:center;padding:10px}
+  .pcard .overlay{position:absolute;inset:0;background:rgba(28,43,58,.88);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;opacity:0;transition:opacity .2s ease;color:#fff;text-align:center;padding:16px}
+  .pcard:hover .overlay{opacity:1}
+  .pcard .overlay .see-more{font-family:var(--font-mono);font-size:12px;color:var(--amber);border:1px solid var(--amber);padding:5px 12px;border-radius:3px}
+  .pcard .cap{padding:12px 14px}
+  .pcard .cap h3{font-family:var(--font-head);font-size:15px;font-weight:600}
+  .pcard .cap p{font-size:12.5px;color:var(--ink-soft);margin-top:3px}
+
+  .more-btn{margin-top:32px;display:inline-block;font-family:var(--font-body);font-size:14.5px;font-weight:500;padding:11px 22px;border:1.5px solid var(--ink);border-radius:3px;background:none;color:var(--ink);cursor:pointer;transition:.15s}
+  .more-btn:hover{background:var(--ink);color:var(--paper)}
+
+  /* PROJECTS PAGE */
+  .filters{display:flex;gap:10px;flex-wrap:wrap;margin:22px 0 28px}
+  .filters button{font-family:var(--font-mono);font-size:12.5px;padding:7px 14px;border:1px solid var(--line);border-radius:20px;background:none;color:var(--ink-soft);cursor:pointer;transition:.15s}
+  .filters button.active{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+  .grid8{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:20px}
+  .pcard.hidden{display:none}
+  @media(max-width:867px){#projGrid .pcard[onclick*="gameboard"]{order:-1}}
+
+  /* PROJECT DETAIL PAGE */
+  .detail-hero{width:100%;aspect-ratio:16/7;border-radius:6px;background:repeating-linear-gradient(45deg,var(--line) 0,var(--line) 1px,transparent 1px,transparent 16px),var(--paper-dim);display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:13px;color:var(--ink-soft);margin-bottom:34px}
+  .detail-phrase{text-align:center;font-family:'Caveat',cursive;font-weight:700;font-size:clamp(2rem,5vw,3rem);text-decoration:underline;text-decoration-color:var(--amber);text-decoration-thickness:3px;text-underline-offset:8px;color:var(--ink);margin-bottom:40px}
+  .detail-content{max-width:620px;margin:0 auto}
+  .detail-content p{margin-bottom:18px;font-size:15.5px;line-height:1.75;color:var(--ink-soft)}
+  .detail-content h3{font-family:var(--font-head);font-weight:600;font-size:18px;margin:34px 0 14px;text-align:center}
+  .detail-pic{width:100%;aspect-ratio:16/9;border-radius:5px;background:repeating-linear-gradient(45deg,var(--line) 0,var(--line) 1px,transparent 1px,transparent 14px),var(--paper-dim);display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:11px;color:var(--ink-soft);margin:22px 0}
+  .detail-list{margin:0 0 18px}
+  .detail-list .item{margin-bottom:16px}
+  .detail-list .num{font-family:var(--font-mono);color:var(--amber-dim);font-size:13px;margin-right:6px}
+  .detail-list .t{font-weight:600;font-family:var(--font-head)}
+  .dot{display:inline-block;width:12px;height:12px;border-radius:50%;vertical-align:-1px;margin:0 3px 0 1px}
+  .dot-white{background:#fff;border:1px solid #b8b4cc;box-shadow:0 0 7px 1px rgba(150,150,190,.55)}
+  .dot-violet{background:#8a5cf6;box-shadow:0 0 8px 2px rgba(138,92,246,.55)}
+  .pcard.spacer{visibility:hidden;pointer-events:none;box-shadow:none;border:none}
+  @media(max-width:867px){.pcard.spacer{display:none}}
+  .back-link{display:inline-block;margin-bottom:28px;font-family:var(--font-mono);font-size:13px;color:var(--ink-soft);cursor:pointer;background:none;border:none}
+  .back-link:hover{color:var(--amber-dim)}
+  .tagline{font-family:var(--font-mono);font-size:10.5px;color:var(--amber-dim);margin-bottom:4px}
+
+  /* IMAGES */
+  .pcard .media{position:relative;overflow:hidden;padding:0}
+  .pcard .media img{width:100%;height:100%;object-fit:cover;display:block}
+  .detail-hero.has-img{aspect-ratio:auto;background:none;display:block}
+  .detail-hero img{width:100%;max-height:520px;object-fit:cover;display:block;border-radius:6px}
+  .detail-gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin:22px 0;align-items:start}
+  .detail-model{width:100%;height:420px;border-radius:5px;background:var(--paper-dim);margin:22px 0;display:block}
+  .detail-embed{display:block;width:100%;height:700px;border:none;border-radius:12px;margin:22px 0;overflow:hidden;background:#0d0b1a}
+
+  /* PORTRAIT HERO + PORTRAIT PICTURES */
+  .detail-hero.contain{background:var(--paper-dim)}
+  .detail-hero.contain img{max-height:600px;object-fit:contain}
+
+  .detail-content p.sub-head{text-align:center;font-family:var(--font-mono);font-size:13px;color:var(--amber-dim);margin:-6px 0 14px}
+
+  /* FIGURES + CAPTIONS */
+  .fig{margin:22px 0}
+  .fig img{width:100%;height:auto;display:block;border-radius:5px;margin:0 auto}
+  .fig figcaption{font-family:var(--font-mono);font-size:12.5px;line-height:1.5;color:var(--ink-soft);text-align:center;margin-top:9px}
+  .fig.portrait img{width:auto;max-width:100%;max-height:520px}
+  .fig.natural img{width:auto;max-width:100%}
+  .fig.wide{width:min(1044px,calc(100vw - 56px));position:relative;left:50%;transform:translateX(-50%)}
+  .detail-gallery .fig{margin:0}
+  .fig .detail-model{margin:0}
+  .detail-hero.natural{background:var(--paper-dim);padding:0}
+  .detail-hero.natural img{width:auto;max-width:100%;max-height:none;margin:0 auto}
+  .detail-hero video{display:block;margin:0 auto;width:100%;max-width:720px;height:auto;aspect-ratio:1/1;object-fit:cover;border-radius:6px;background:var(--paper-dim)}
+
+  /* BACK TO TOP */
+  .to-top{position:fixed;right:max(18px,env(safe-area-inset-right,0px));bottom:max(18px,env(safe-area-inset-bottom,0px));z-index:900;width:44px;height:44px;border-radius:50%;border:1.5px solid var(--ink);background:var(--paper);color:var(--ink);font-size:20px;line-height:1;cursor:pointer;opacity:0;pointer-events:none;transform:translateY(8px);transition:opacity .25s,transform .25s,background .15s,color .15s}
+  .to-top.show{opacity:1;pointer-events:auto;transform:none}
+  .to-top:hover{background:var(--ink);color:var(--paper)}
+
+  /* CLICK TO ENLARGE */
+  #page-detail img{cursor:zoom-in}
+  .lightbox{position:fixed;inset:0;z-index:1000;background:rgba(10,14,18,.92);display:none;flex-direction:column;gap:12px;align-items:center;justify-content:center;padding:max(20px,env(safe-area-inset-top,0px)) 20px max(20px,env(safe-area-inset-bottom,0px));cursor:zoom-out}
+  .lightbox.open{display:flex;animation:pageIn .2s ease}
+  .lightbox img{max-width:96vw;max-height:82vh;object-fit:contain;border-radius:4px;cursor:zoom-out}
+  .lightbox .lb-cap{font-family:var(--font-mono);font-size:13px;color:#d6dbe0;text-align:center;max-width:80ch}
+  .lightbox .lb-cap:empty{display:none}
+  .lightbox .lb-close{position:absolute;top:max(14px,env(safe-area-inset-top,0px));right:18px;font-family:var(--font-mono);font-size:26px;line-height:1;color:#fff;background:none;border:none;cursor:pointer;padding:6px 10px}
+
+  /* ABOUT */
+#page-about{text-align:center}
+  .about-title{font-family:'Caveat',cursive;font-weight:700;font-size:clamp(2.8rem,7vw,4.4rem);line-height:1.1;text-decoration:underline;text-decoration-color:var(--amber);text-decoration-thickness:4px;text-underline-offset:8px}
+  .about-body{text-align:left;max-width:68ch;margin:32px auto 0;padding:38px 42px;background:var(--paper-dim);border:1px solid var(--line);border-radius:22px;box-shadow:0 8px 28px rgba(28,43,58,.07);font-size:18px;line-height:1.75;color:var(--ink-strong)}
+  a.more-btn{text-decoration:none}
+  .about-actions{margin-top:32px}
+  .about-actions .more-btn{margin-top:0}
+  .contact{margin-top:64px;border-top:1px solid var(--line)}
+  .contact-links{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-top:20px}
+  .contact-note{margin:10px 0 0;font-size:16px;color:var(--ink-strong)}
+  .contact-card{display:inline-flex;align-items:center;gap:11px;padding:12px 26px;border:2px solid var(--bar);border-radius:999px;background:var(--bar);color:#fff;text-decoration:none;font-weight:500;font-size:15px;transition:.18s}
+  .contact-card svg{width:20px;height:20px;flex:none}
+  .contact-card:hover{border-color:var(--amber);transform:translateY(-2px);box-shadow:0 8px 18px rgba(28,43,58,.18)}
+  .about-body p{margin-bottom:16px}
+  .about-body p:last-child{margin-bottom:0}
+  @media(max-width:560px){.about-body{padding:26px 22px;border-radius:18px}}
+
+  .site-footer{background:var(--bar);border-top:3px solid var(--amber);margin-top:40px;color:#B9C5CF;font-family:var(--font-mono);font-size:12.5px}
+  .footer-in{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px 24px;padding-top:30px;padding-bottom:34px}
+  .footer-links{display:flex;gap:24px}
+  @media(max-width:1200px){.footer-links{margin-right:58px}}
+  .footer-links a{color:#B9C5CF;text-decoration:none;border-bottom:1px solid transparent;transition:.15s}
+  .footer-links a:hover{color:#fff;border-color:var(--amber)}
+
+</style>
+<script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js"></script>
+</head>
+<body>
+
+<header class="site-header">
+<div class="wrap">
+  <nav>
+    <button class="nav-mark" id="navMark" aria-label="Go to home page">YM</button>
+    <div class="nav-links">
+      <button class="navbtn active" data-page="home">Home</button>
+      <button class="navbtn" data-page="projects">Projects</button>
+      <button class="navbtn" data-page="about">About Me</button>
+    </div>
+  </nav>
+</div>
+</header>
+
+<div class="wrap">
+
+  <!-- HOME -->
+  <section class="page active" id="page-home">
+    <div class="hero-grid">
+      <div class="hero-text">
+        <h1 class="scope-phrase">Welcome to the lab.</h1>
+      </div>
+      <div class="scope-wrap">
+        <img src="Assets/oscilloscope.png"
+        alt="Oscilloscope" 
+        style="width:100%;height:auto;display:block;filter:drop-shadow(0 14px 20px rgba(28,43,58,.22))" />
+      </div>
+    </div>
+
+    <div class="home-intro">
+      <p class="home-about">I’m Yehya, an Electrical Engineer fascinated by mathematics and physics, and by turning them into things I can build. From embedded electronics to control and interactive systems, I enjoy stepping into unfamiliar problems and learning what it takes to make them work.</p>
+    </div>
+
+    <h2 class="section-head">Projects</h2>
+    <div class="grid3">
+      <div class="pcard" data-tag="Control" onclick="goDetail('fuzzy')">
+        <div class="media"><img src="Assets/Fuzzy/Inverted Pendulum.png" alt="Inverted pendulum" loading="lazy"></div>
+        <div class="overlay"><span class="see-more">See more</span></div>
+        <div class="cap"><h3>Fuzzy Logic Controller</h3><p>MATLAB · Simulink · Control</p></div>
+      </div>
+      <div class="pcard" data-tag="Interactive Fun" onclick="goDetail('gameboard')">
+        <div class="media"><img src="Assets/Game Board/Board/Final Board.png" alt="Smart game board" loading="lazy"></div>
+        <div class="overlay"><span class="see-more">See more</span></div>
+        <div class="cap"><h3>Smart GameBoard</h3><p>Embedded Systems · 3D Printing · LED Control</p></div>
+      </div>
+      <div class="pcard" data-tag="Interactive Fun" onclick="goDetail('wand')">
+        <div class="media"><img src="Assets/Wand/Wand.png" alt="Magic wand" loading="lazy"></div>
+        <div class="overlay"><span class="see-more">See more</span></div>
+        <div class="cap"><h3>Magic Wand</h3><p>Machine Learning · Gesture Recognition · Python</p></div>
+      </div>
+    </div>
+    <button class="more-btn" onclick="goPage('projects')">More Projects →</button>
+  </section>
+
+  <!-- PROJECTS -->
+  <section class="page" id="page-projects">
+    <h2>Projects</h2>
+    <div class="filters">
+      <button class="filterbtn active" data-filter="All">All</button>
+      <button class="filterbtn" data-filter="Control">Control & Simulation</button>
+      <button class="filterbtn" data-filter="Interactive">Interactive</button>
+      <button class="filterbtn" data-filter="Fun">Fun</button>
+    </div>
+    <div class="grid8" id="projGrid">
+      <div class="pcard" data-tag="Interactive Fun" onclick="goDetail('wand')"><div class="media"><img src="Assets/Wand/Wand.png" alt="Magic wand" loading="lazy"></div><div class="overlay"><span class="tagline">Interactive</span><span class="see-more">See more</span></div><div class="cap"><h3>Magic Wand</h3><p>Machine Learning · Gesture Recognition · Python</p></div></div>
+      <div class="pcard" data-tag="Interactive Fun" onclick="goDetail('gameboard')"><div class="media"><img src="Assets/Game Board/Board/Final Board.png" alt="Smart game board" loading="lazy"></div><div class="overlay"><span class="tagline">Interactive</span><span class="see-more">See more</span></div><div class="cap"><h3>Smart GameBoard</h3><p>Embedded Systems · 3D Printing · LED Control</p></div></div>
+      <div class="pcard" data-tag="Control" onclick="goDetail('motorid')"><div class="media"><img src="Assets/DC Motor/DC Motor.png" alt="DC motor setup" loading="lazy"></div><div class="overlay"><span class="tagline">Control & Simulation</span><span class="see-more">See more</span></div><div class="cap"><h3>Motor System Identification</h3><p>MATLAB · Simulink · Control</p></div></div>
+      <div class="pcard spacer" data-tag="" aria-hidden="true"></div>
+      <!-- Mafioso (add back later): <div class="pcard" data-tag="Fun" onclick="goDetail('mafioso')"><div class="media">[ app screenshot ]</div><div class="overlay"><span class="tagline">Fun</span><span class="see-more">See more</span></div><div class="cap"><h3>Mafioso</h3><p>Mobile App · Game</p></div></div> -->
+      <div class="pcard" data-tag="Interactive Fun" onclick="goDetail('avatar')"><div class="media"><img src="Assets/Avatar/Avatar.png" alt="Voice-driven avatar" loading="lazy"></div><div class="overlay"><span class="tagline">Interactive</span><span class="see-more">See more</span></div><div class="cap"><h3>Audio Reactive Avatar</h3><p>TouchDesigner · Audio Processing · Interactive Systems</p></div></div>
+      <div class="pcard" data-tag="Control" onclick="goDetail('fuzzy')"><div class="media"><img src="Assets/Fuzzy/Inverted Pendulum.png" alt="Inverted pendulum" loading="lazy"></div><div class="overlay"><span class="tagline">Control & Simulation</span><span class="see-more">See more</span></div><div class="cap"><h3>Fuzzy Logic Controller</h3><p>MATLAB · Simulink · Control</p></div></div>
+      <!-- Balance robot (re-enable when you have photos)
+      <div class="pcard" data-tag="Control" onclick="goDetail('robot')"><div class="media">[ robot balancing ]</div><div class="overlay"><span class="tagline">Control</span><span class="see-more">See more</span></div><div class="cap"><h3>Self-Balancing Robot</h3><p>Sensors · Feedback control</p></div></div>
+      -->
+    </div>
+  </section>
+
+  <!-- PROJECT DETAIL -->
+  <section class="page" id="page-detail">
+    <button class="back-link" onclick="goPage('projects')">← Back to Projects</button>
+    <div class="detail-hero" id="detailHero">[ hero photo ]</div>
+    <div class="detail-phrase" id="detailPhrase"></div>
+    <div class="detail-content" id="detailBody"></div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="page" id="page-about">
+    <h2 class="about-title">About Me</h2>
+    <div class="about-body">
+      <p>I’m an Electrical Engineer with a deep passion for mathematics and physics. I’ve always been fascinated by the way these subjects can describe the world around us, and studying engineering gave me the opportunity to turn that fascination into something I could build and experiment with.</p>
+      <p>Along the way, I developed an analytical mindset that changed the way I approach problems. I enjoy breaking complex ideas down, understanding how their pieces fit together, and then finding a way to bring them to life.</p>
+      <p>I’m especially drawn to new ideas and unfamiliar problems. My projects have taken me across different worlds from embedded electronics to interactive technologies.</p>
+      <p>I enjoy the process of stepping into something I don’t know, learning what it takes to make it work, and discovering where the idea can go. There is always something new to learn, something new to build, and another question worth exploring—and that’s what keeps me curious.</p>
+      <p>If you have an idea worth exploring, or simply want to say hello, I’d love to hear from you.</p>
+    </div>
+
+    <div class="about-actions">
+      <a class="more-btn" href="Assets/Resume.pdf" download>Download Resume ↓</a>
+    </div>
+
+    <div class="contact">
+      <h3 style="margin:48px 0 0;font-family:var(--font-head);font-weight:600;font-size:1.3rem;color:var(--ink-strong)">Contact Me</h3>
+      <p class="contact-note">Feel free to connect with me through LinkedIn or email.</p>
+      <div class="contact-links">
+        <a class="contact-card" href="https://www.linkedin.com/in/yehya-medhat-586862265" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 1 1 0-4.125 2.062 2.062 0 0 1 0 4.125zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg><span>LinkedIn</span></a>
+        <a class="contact-card" href="mailto:yehyamedhat5@gmail.com"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="4.5" width="19" height="15" rx="2.5"/><path d="m3 7 9 6.5L21 7"/></svg><span>Email</span></a>
+      </div>
+    </div>
+  
+  </section>
+
+</div>
+
+<footer class="site-footer">
+  <div class="wrap footer-in">
+    <div>© 2026 Yehya Medhat</div>
+    <div class="footer-links"><a id="fLin" href="#" target="_blank" rel="noopener">LinkedIn</a><a id="fMail" href="#">Email</a></div>
+  </div>
+</footer>
+
+<button class="to-top" id="toTop" aria-label="Back to top">↑</button>
+<div class="lightbox" id="lightbox"><button class="lb-close" aria-label="Close">×</button><img id="lbImg" alt=""><div class="lb-cap" id="lbCap"></div></div>
+
+<script>
+  var projectsData = {
+    gameboard: {
+      hero: "Assets/Game Board/Board/Final Board.png",
+      heroFit: "contain",
+      phrase: "Take Me to the Moon",
+      body: `<p>After getting hooked on the Google Doodle game "Rise of the Half Moon," I knew I wanted to bring the experience off-screen to play with friends in real life. The catch? Keeping track of the scoring manually is an absolute nightmare. That friction sparked the idea for a smart game board to handle the math for us. With built-in logic and dynamic LED feedback for every valid move, the board keeps gameplay fast and smooth.</p>
+      <p>I have to warn you, the following content is not suitable for werewolves.</p>
+      <h3>Game Rules</h3>
+      <p>The game uses the original Google Doodle rules. Players take turns placing tiles on the board, forming different combinations to score more points and outmaneuver their opponent.</p>
+      <figure class="fig portrait"><img src="Assets/Game Board/Rules.png" alt="Game rules" loading="lazy"><figcaption>The original Game rules.</figcaption></figure>
+      <h3>Game Design</h3>
+      <p>The core challenge was translating card-based mechanics, scoring logic, and player interactions into a physical board that could detect moves in real time. I started by breaking down the game's scoring rules and writing the code to mirror them. Once the logic was settled, I faced the main technical hurdle: how does the board know which moon phase was just played?</p>
+      <p>RFID was an option, but I wanted a more budget-friendly setup — and more than just finishing a quick project, I wanted to learn new techniques along the way. That narrowed my choices down to optical color sensing or magnetic identification. Magnets stood out as the most reliable approach. Instead of traditional cards, I designed a 3D-printed tile that holds magnets, then designed a custom board enclosure to house the sensing hardware underneath.</p>
+      <figure class="fig"><img src="Assets/Game Board/Board LEDs.png" alt="Board LEDs" loading="lazy"><figcaption>LEDs under the board light up the valid scoring patterns.</figcaption></figure>
+      <figure class="fig"><model-viewer class="detail-model" src="Assets/Game%20Board/Board%20Surface.glb" alt="3D model of the board surface" camera-controls auto-rotate touch-action="pan-y" shadow-intensity="1"></model-viewer><figcaption>Interactive 3D model of the board surface. Drag to rotate, scroll to zoom.</figcaption></figure>
+      <h3>How It Works</h3>
+      <div class="detail-list">
+        <div class="item"><span class="num">01</span><span class="t">The Tiles</span> — Custom physical tiles represent all eight moon phases, each embedded with a unique magnetic arrangement.</div>
+        <div class="item"><span class="num">02</span><span class="t">Move Detection</span> — Hall-effect sensors arrayed beneath the board detect when a tile lands and send signals to the microcontroller.</div>
+        <div class="item"><span class="num">03</span><span class="t">Score Calculation</span> — The microcontroller decodes the magnetic signature, identifies the phase, updates the game state, and checks whether the placement completes a scoring pattern.</div>
+        <div class="item"><span class="num">04</span><span class="t">Visual Feedback</span> — Integrated LEDs light up to highlight valid scoring patterns directly on the board. They glow in two colors, one for each player: <span class="dot dot-white"></span>white for the player on the white-moon side, and <span class="dot dot-violet"></span>violet for the player on the dark-moon side.</div>
+      </div>
+      <h3>Full Moon</h3>
+      <div class="detail-gallery"><figure class="fig"><img src="Assets/Game Board/Score/Pair.png" alt="Scoring: pair" loading="lazy"><figcaption>Scoring example: a pair.</figcaption></figure><figure class="fig"><img src="Assets/Game Board/Score/Full Moon.png" alt="Scoring: full moon" loading="lazy"><figcaption>Scoring example: a full moon.</figcaption></figure><figure class="fig"><img src="Assets/Game Board/Score/Moon Cycle.png" alt="Scoring: moon cycle" loading="lazy"><figcaption>Scoring example: a moon cycle.</figcaption></figure></div>
+      <figure class="fig natural"><img src="Assets/Game Board/Board/Tiles.png" alt="Game tiles" loading="lazy"><figcaption>Moon-phase tiles, each with its own magnetic signature.</figcaption></figure>`
+    },
+    wand: {
+      hero: "Assets/Wand/Wand.png",
+      phrase: "I Solemnly Swear That I Am Up to No Good",
+      body: `<p>A wand is the single most essential tool in any wizard's arsenal. Lacking a steady supply of phoenix feathers or unicorn tail hairs, I had to take a slightly more modern, engineering-driven path to craft my own. Beyond the homage to the wizarding world, this project served as the perfect hands-on playground to test my machine learning studies in a real-world setting.</p>
+      <h3>Wand Design</h3>
+      <p>I started by 3D printing a classic Harry Potter wand model found online, which served as the chassis for the embedded electronics. While gesture-controlled wands are a familiar project in the maker community, my primary motivation was ML practice: building a custom motion-recognition pipeline from scratch. I collected motion dataset samples for three distinct wand gestures, ran experiments to refine classification accuracy, and wrote the interface logic to map those movements to live spell effects on screen.</p>
+      <figure class="fig"><img src="Assets/Wand/Components.png" alt="Wand components" loading="lazy"><figcaption>The components used.</figcaption></figure>
+      <h3>Behind the Magic</h3>
+      <div class="detail-list">
+        <div class="item"><span class="num">01</span><span class="t">Electronics</span> — A compact microcontroller and an MPU6050 6-axis motion sensor packaged alongside the wand capture acceleration and angular velocity as gestures are cast.</div>
+        <div class="item"><span class="num">02</span><span class="t">Model Training</span> — Using raw sensor data logged across the three gesture types, I extracted distinct motion features and trained a machine learning model to classify each spell path with the best possible accuracy using Python.</div>
+        <div class="item"><span class="num">03</span><span class="t">Interactive Feedback</span> — The trained model can be compiled into lightweight C code for edge processing on the chip, but I kept the setup connected to a PC to stream predicted gestures into a dynamic HTML web app for instant visual feedback. The architecture is staged for future upgrades — adding wireless communication to make the wand completely standalone, and teaching it more gestures to grow its spell book.</div>
+      </div>
+      <figure class="fig"><img src="Assets/Wand/Parameters Sweep.png" alt="Parameters sweep" loading="lazy"><figcaption>Sweeping model parameters to find the best gesture classifier.</figcaption></figure>
+      <h3>Finite Incantatem</h3>
+      <p class="sub-head">Try the visual feedback</p>
+      <p>Press a button to see the spell shape the wand generates.</p>
+      <iframe class="detail-embed" src="Assets/Wand/spell.html" title="Interactive spell feedback" scrolling="no"></iframe>`
+    },
+    avatar: {
+      hero: "Assets/Avatar/Avatar.png",
+      heroVideo: "Assets/Avatar/Avatar.mp4",
+      heroFit: "natural",
+      phrase: "Say It, See It",
+      body: `<p>Nox is a little character that listens. Speak, and its face reacts to your voice: the mouth opens and closes to mimic what it hears, and its expression shifts with the sound. Move your mouse, and it keeps an eye on you, following your cursor with its eyes and turning its face toward it, as if curious about what you are doing.</p>
+      <p>I built it in TouchDesigner, inspired by Kohui's "Talking Ball Starboy" tutorial, as a way to explore how live sound can bring a drawn character to life.</p>
+      <h3>How It Works</h3>
+      <div class="detail-list">
+        <div class="item"><span class="t">It Listens</span> — The microphone picks up your voice, and the louder or higher you speak, the more the mouth and face react.</div>
+        <div class="item"><span class="t">It Watches</span> — The eyes and face follow your mouse across the screen, so the character always seems to be looking at you.</div>
+        <div class="item"><span class="t">It Feels Alive</span> — A gentle floating motion keeps it softly moving, even when nobody is speaking.</div>
+      </div>
+      <figure class="fig natural"><img src="Assets/Avatar/Face.png" alt="Avatar face" loading="lazy"><figcaption>The avatar face.</figcaption></figure>
+      <figure class="fig wide"><img src="Assets/Avatar/Network.png" alt="TouchDesigner network" loading="lazy"><figcaption>The TouchDesigner network that drives the animation.</figcaption></figure>`
+    },
+    mafioso: {
+      phrase: "Mafioso",
+      body: `<p>Project details coming soon.</p>`
+    },
+    robot: {
+      phrase: "Stay Upright, Stay Honest",
+      body: `<p>A classic control-systems project built around the inverted pendulum problem. Using real-time motion tracking from an MPU6050 sensor, the robot continuously calculates tilt angle and applies closed-loop PID adjustments to stay upright and recover from physical pushes.</p>
+      <h3>Highlights</h3>
+      <div class="detail-list">
+        <div class="item"><span class="t">PID Control Loop</span> — Runs high-frequency feedback calculations to stabilize the chassis in real time.</div>
+        <div class="item"><span class="t">Sensor Fusion</span> — Combines accelerometer and gyroscope data to filter out vibration noise and track true pitch angle.</div>
+        <div class="item"><span class="t">Disturbance Recovery</span> — Adjusts wheel torque dynamically to maintain balance when bumped or pushed.</div>
+      </div>
+      <div class="detail-pic">[ pictures ]</div>`
+    },
+    motorid: {
+      hero: "Assets/DC Motor/DC Motor.png",
+      phrase: "Know Your Motor",
+      body: `<p>A hands-on digital control project focused on bridging theoretical control design with real physical hardware. The project applies system identification concepts by collecting raw experimental data from an uncharacterized DC motor to build a mathematical model, used to design a discrete lead compensator for rapid, precise position control.</p>
+      <h3>Highlights</h3>
+      <div class="detail-list">
+        <div class="item"><span class="t">Experimental System ID</span> — Logged real-time input voltage and optical encoder position data to estimate a second-order transfer function representing the motor in MATLAB's system identification tool.</div>
+        <div class="item"><span class="t">Discrete Compensator Design</span> — Modeled digital root locus trajectories using MATLAB's SISOTool to design a lead compensator meeting the required performance criteria.</div>
+        <div class="item"><span class="t">Real-Time Execution</span> — Transformed the discrete transfer function into a difference equation running on an Arduino to drive an H-bridge driver and achieve closed-loop position control.</div>
+      </div>
+      <figure class="fig"><img src="Assets/DC Motor/System Design Chart.png" alt="System design chart" loading="lazy"><figcaption>Block diagram of the design process.</figcaption></figure>
+      <figure class="fig"><img src="Assets/DC Motor/Response without Compensator.png" alt="Response without compensator" loading="lazy"><figcaption>Step response without the compensator.</figcaption></figure>
+      <figure class="fig"><img src="Assets/DC Motor/Response with Compensator.png" alt="Response with compensator" loading="lazy"><figcaption>Step response with the lead compensator.</figcaption></figure>`
+    },
+    fuzzy: {
+      hero: "Assets/Fuzzy/Inverted Pendulum.png",
+      heroFit: "natural",
+      phrase: "Fuzzy Logic, Solid Control",
+      body: `<p>A nonlinear control-systems project focused on stabilizing an inverted pendulum using a fuzzy logic controller developed in MATLAB and Simulink. The project begins by modeling the cart-pendulum dynamics using both the exact nonlinear equations and a small-angle linearized model. A fuzzy inference system is then designed to control the pendulum based on its measured state, providing a feedback strategy for maintaining the pendulum in its upright position.</p>
+      <h3>Highlights</h3>
+      <div class="detail-list">
+        <div class="item"><span class="t">Nonlinear System Modeling</span> — Developed and simulated the inverted-pendulum dynamics using both the exact nonlinear equations and the small-angle linear approximation.</div>
+        <div class="item"><span class="t">Fuzzy Logic Controller</span> — Designed a rule-based fuzzy controller to determine the appropriate control action from the pendulum's state and stabilize it around the upright position.</div>
+        <div class="item"><span class="t">MATLAB & Simulink Implementation</span> — Integrated the fuzzy inference system into the Simulink model to create a closed-loop controller and evaluate its performance.</div>
+        <div class="item"><span class="t">Stability & Disturbance Response</span> — Tested the controller from an initial pendulum displacement and analyzed its ability to bring the system back toward equilibrium.</div>
+        <div class="item"><span class="t">Model Validation</span> — Compared the controller's behavior across the linearized and nonlinear pendulum models to evaluate performance under different operating conditions.</div>
+      </div>
+      <figure class="fig"><img src="Assets/Fuzzy/Feedback Loop.png" alt="Feedback loop" loading="lazy"><figcaption>Controller feedback loop.</figcaption></figure>`
+    }
+  };
+  (function(){
+    var lb=document.getElementById('lightbox'), li=document.getElementById('lbImg'), lc=document.getElementById('lbCap');
+    function close(){ lb.classList.remove('open'); li.removeAttribute('src'); }
+    document.addEventListener('click',function(e){
+      var t=e.target;
+      if(t.tagName==='IMG' && t.closest('#page-detail')){ li.src=t.src; li.alt=t.alt; var fg=t.closest('figure'), cp=fg&&fg.querySelector('figcaption'); lc.textContent=cp?cp.textContent:''; lb.classList.add('open'); }
+      else if(lb.classList.contains('open') && (lb.contains(t))){ close(); }
+    });
+    document.addEventListener('keydown',function(e){ if(e.key==='Escape') close(); });
+  })();
+  window.addEventListener('message',function(e){
+    if(!e.data || e.data.type!=='spell-height') return;
+    var fr=document.querySelector('.detail-embed');
+    if(fr && e.source===fr.contentWindow) fr.style.height=e.data.height+'px';
+  });
+  (function(){
+    var cc=document.querySelectorAll('.contact-card');
+    if(cc.length>1){ document.getElementById('fLin').href=cc[0].href; document.getElementById('fMail').href=cc[1].href; }
+  })();
+  (function(){
+    var b=document.getElementById('toTop');
+    window.addEventListener('scroll',function(){ b.classList.toggle('show', window.scrollY>300); },{passive:true});
+    b.addEventListener('click',function(){ window.scrollTo({top:0,behavior:'smooth'}); });
+  })();
+  function goDetail(id){
+    var p = projectsData[id];
+    if(!p) return;
+    document.getElementById('detailPhrase').innerHTML = p.phrase;
+    document.getElementById('detailBody').innerHTML = p.body;
+    var h = document.getElementById('detailHero');
+    if(p.hero){ h.innerHTML = p.heroVideo ? '<video src="'+p.heroVideo+'" poster="'+p.hero+'" width="720" height="720" autoplay muted loop playsinline preload="auto" aria-label="'+p.phrase+'"></video>' : '<img src="'+p.hero+'" alt="'+p.phrase+'">'; var vd=h.querySelector('video'); if(vd){ vd.muted=true; var pp=vd.play(); if(pp&&pp.catch) pp.catch(function(){}); } h.classList.add('has-img'); h.classList.toggle('contain', p.heroFit==='contain'); h.classList.toggle('natural', p.heroFit==='natural'); }
+    else { h.textContent = '[ hero photo ]'; h.classList.remove('has-img','contain','natural'); }
+    goPage('detail');
+  }
+  function goPage(id){
+    document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+    document.getElementById('page-'+id).classList.add('active');
+    document.querySelectorAll('#detailHero video').forEach(function(v){ if(id==='detail'){ var q=v.play(); if(q&&q.catch) q.catch(function(){}); } else { v.pause(); } });
+    document.querySelectorAll('.navbtn').forEach(b=>b.classList.toggle('active',b.dataset.page===id));
+    window.scrollTo({top:0,behavior:'instant'});
+  }
+  document.querySelectorAll('.navbtn').forEach(b=>b.addEventListener('click',()=>goPage(b.dataset.page)));
+  document.getElementById('navMark').addEventListener('click',function(){ goPage('home'); });
+  (function(){
+    var hd=document.querySelector('.site-header');
+    window.addEventListener('scroll',function(){ hd.classList.toggle('compact', window.scrollY>40); },{passive:true});
+  })();
+  document.querySelectorAll('.filterbtn').forEach(b=>{
+    b.addEventListener('click',()=>{
+      document.querySelectorAll('.filterbtn').forEach(x=>x.classList.remove('active'));
+      b.classList.add('active');
+      var f=b.dataset.filter;
+      document.querySelectorAll('#projGrid .pcard').forEach(c=>{
+        c.classList.toggle('hidden', f!=='All' && c.dataset.tag.split(' ').indexOf(f)===-1);
+      });
+    });
+  });
+</script>
+</body>
+</html>
